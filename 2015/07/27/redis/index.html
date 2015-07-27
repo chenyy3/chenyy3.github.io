@@ -18,7 +18,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/07/27/redis/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="welcome to redis">
-<meta property="og:updated_time" content="2015-07-27T03:48:23.066Z">
+<meta property="og:updated_time" content="2015-07-27T09:31:08.564Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="redis">
 <meta name="twitter:description" content="welcome to redis">
@@ -74,7 +74,18 @@
   
   <div class="entry">
     
-      <p>welcome to redis<br><a id="more"></a><br>Redis是一个key-value存储系统。和Memcached类似，它支持存储的value类型相对更多，包括string(字符串)、list(链表)、set(集合)、zset(sorted set —有序集合)和hash（哈希类型）。这些数据类型都支持push/pop、add/remove及取交集并集和差集及更丰富的操作，而且这些操作都是原子性的。在此基础上，redis支持各种不同方式的排序。与memcached一样，为了保证效率，数据都是缓存在内存中。区别的是redis会周期性的把更新的数据写入磁盘或者把修改操作写入追加的记录文件，并且在此基础上实现了master-slave</p>
+      <p>welcome to redis<br><a id="more"></a><br>  Redis是一个key-value存储系统。和Memcached类似，它支持存储的value类型相对更多，包括string(字符串)、list(链表)、set(集合)、zset(sorted set —有序集合)和hash（哈希类型）。这些数据类型都支持push/pop、add/remove及取交集并集和差集及更丰富的操作，而且这些操作都是原子性的。在此基础上，redis支持各种不同方式的排序。与memcached一样，为了保证效率，数据都是缓存在内存中。区别的是redis会周期性的把更新的数据写入磁盘或者把修改操作写入追加的记录文件，并且在此基础上实现了master-slave<br>  一、    安装<br>先下载需要的安装<br>官方下载：<a href="http://redis.io/download" target="_blank" rel="external">http://redis.io/download</a> 可以根据需要下载不同版本<br>windows版：<a href="https://github.com/mythz/redis-windows" target="_blank" rel="external">https://github.com/mythz/redis-windows</a><br>附件是我下载的windows版本，可直接使用，将redis包解压到磁盘中，然后打开DOS窗口切换到解压的路径，进入redis目录后开启服务（注意加上redis.conf）<br>输入：redis-server.exe redis.conf<br>如下图：</p>
+<p>启动后可通过关闭该窗口来关闭redis服务</p>
+<p>二、    使用</p>
+<ol>
+<li>命令行使用<br>在开始redis服务的情况下，在打开一个DOS窗口，并切换到redis目录，执行redis-cli.exe，如果需要修改ip和端口，在redis-cli.exe后增加-h 127.0.0.1 –p 6379<br>完整的是：redis-cli.exe -h 127.0.0.1 –p 6379<br>本地默认的ip就是127.0.0.1,端口默认的也是6379，所以可以直接执行redis-cli.exe</li>
+</ol>
+<p>如下图：</p>
+<p>执行redis-cli.exe后可以直接输入set key value命令来设置值，通过get key来获取值，当然还有其它的命令来设置不同结构数据，如mset key1 value1 key2 value2 连续设置两个key-value对值<br>获取是通过 mset key1 key2得到的value是一个List的集合 。其它的命令不一一列举，后面在Java中会有讲到。<br>有意思的是如果一个事务中的某个命令执行出错了，事务中其它的命令照样执行，不会有影响。Redis的事务没有关系数据库事务提供的回滚（rollback） 功能，我们只能自己手动执行命令将数据库复原回事务执行前的状态等。另外咱们常用的都是在程序中执行，Java是会有语法检错的。</p>
+<ol>
+<li>Java中使用<br>Redis的Java首选开发包是jedis<br>Jedis的jar下载地址：<a href="http://maven.outofmemory.cn/redis.clients/jedis/2.5.2/" target="_blank" rel="external">http://maven.outofmemory.cn/redis.clients/jedis/2.5.2/</a><br>附件中是我下载的2.5.2版本<br>将下载好的jedis jar包放到自己建好的工程包目录下，引入一些基础的Apache和jdk包即可，我就是将现有微厅的jar全部拷贝进去，除了一些工程特殊的jar。<br>然后写一个单元测试类JedisUtilTest.java见附件，里面有相应的解释。</li>
+</ol>
+<p>注意：我在测试的过程中遇到了一个问题，弄了好长时间没有解决，就是写测试类初始化时JedisPool pool=new JedisPool(new JedisPoolConfig(), “127.0.0.1”);<br>总是报初始化错误，原因是找不到GenericObjectPoolConfig类，上网上搜了一下，说是没有引入commons-pool包，但是我发现工程里已经有commons-pool-1.6.jar，然后我就反编译了commons-pool-1.6.jar，发现里面根本就没有GenericObjectPoolConfig类。后来又查找，大家都说是jedis版本的问题，我就一顿的降版本，将了好几个都没使，网上也有和我遇到一样问题的，最后没有给出解决方案。最后我换了个<br>思路，查查commons-pool有没有更高版本的，找到commons-pool2-2.2.jar更高版本后居然好使了</p>
 
     
   </div>
