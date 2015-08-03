@@ -18,7 +18,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/07/27/redis/index.html">
 <meta property="og:site_name" content="微风">
 <meta property="og:description" content="Redis是一个key-value存储系统。和Memcached类似，它支持存储的value类型相对更多，包括string(字符串)、list(链表)、set(集合)、zset(sorted set —有序集合)和hash（哈希类型）。这些数据类型都支持push/pop、add/remove及取交集并集和差集及更丰富的操作，而且这些操作都是原子性的。在此基础上，redis支持各种不同方式的排序。与">
-<meta property="og:updated_time" content="2015-07-27T09:45:16.352Z">
+<meta property="og:updated_time" content="2015-08-03T03:55:49.112Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="redis">
 <meta name="twitter:description" content="Redis是一个key-value存储系统。和Memcached类似，它支持存储的value类型相对更多，包括string(字符串)、list(链表)、set(集合)、zset(sorted set —有序集合)和hash（哈希类型）。这些数据类型都支持push/pop、add/remove及取交集并集和差集及更丰富的操作，而且这些操作都是原子性的。在此基础上，redis支持各种不同方式的排序。与">
@@ -74,18 +74,146 @@
   
   <div class="entry">
     
-      <p>Redis是一个key-value存储系统。和Memcached类似，它支持存储的value类型相对更多，包括string(字符串)、list(链表)、set(集合)、zset(sorted set —有序集合)和hash（哈希类型）。这些数据类型都支持push/pop、add/remove及取交集并集和差集及更丰富的操作，而且这些操作都是原子性的。在此基础上，redis支持各种不同方式的排序。与memcached一样，为了保证效率，数据都是缓存在内存中。区别的是redis会周期性的把更新的数据写入磁盘或者把修改操作写入追加的记录文件，并且在此基础上实现了master-slave<br><a id="more"></a><br>  一、    安装<br>先下载需要的安装<br>官方下载：<a href="http://redis.io/download" target="_blank" rel="external">http://redis.io/download</a> 可以根据需要下载不同版本<br>windows版：<a href="https://github.com/mythz/redis-windows" target="_blank" rel="external">https://github.com/mythz/redis-windows</a><br>附件是我下载的windows版本，可直接使用，将redis包解压到磁盘中，然后打开DOS窗口切换到解压的路径，进入redis目录后开启服务（注意加上redis.conf）<br>输入：redis-server.exe redis.conf<br>如下图：</p>
-<p>启动后可通过关闭该窗口来关闭redis服务</p>
-<p>二、    使用</p>
+      <p>Redis是一个key-value存储系统。和Memcached类似，它支持存储的value类型相对更多，包括string(字符串)、list(链表)、set(集合)、zset(sorted set —有序集合)和hash（哈希类型）。这些数据类型都支持push/pop、add/remove及取交集并集和差集及更丰富的操作，而且这些操作都是原子性的。在此基础上，redis支持各种不同方式的排序。与memcached一样，为了保证效率，数据都是缓存在内存中。区别的是redis会周期性的把更新的数据写入磁盘或者把修改操作写入追加的记录文件，并且在此基础上实现了master-slave<br><a id="more"></a><br><strong>一、    安装</strong><br>先下载需要的安装<br>官方下载：<a href="http://redis.io/download" target="_blank" rel="external">http://redis.io/download</a> 可以根据需要下载不同版本<br>windows版：<a href="https://github.com/mythz/redis-windows" target="_blank" rel="external">https://github.com/mythz/redis-windows</a><br>附件是我下载的windows版本，可直接使用，将redis包解压到磁盘中，然后打开DOS窗口切换到解压的路径，进入redis目录后开启服务（注意加上redis.conf）<br>输入：redis-server.exe redis.conf<br>启动后可通过关闭该窗口来关闭redis服务</p>
+<p><strong>二、    使用</strong></p>
 <ol>
-<li>命令行使用<br>在开始redis服务的情况下，在打开一个DOS窗口，并切换到redis目录，执行redis-cli.exe，如果需要修改ip和端口，在redis-cli.exe后增加-h 127.0.0.1 –p 6379<br>完整的是：redis-cli.exe -h 127.0.0.1 –p 6379<br>本地默认的ip就是127.0.0.1,端口默认的也是6379，所以可以直接执行redis-cli.exe</li>
+<li><p>命令行使用<br>在开始redis服务的情况下，在打开一个DOS窗口，并切换到redis目录，执行redis-cli.exe，如果需要修改ip和端口，在redis-cli.exe后增加-h 127.0.0.1 –p 6379<br>完整的是：redis-cli.exe -h 127.0.0.1 –p 6379<br>本地默认的ip就是127.0.0.1,端口默认的也是6379，所以可以直接执行redis-cli.exe。<br>执行redis-cli.exe后可以直接输入set key value命令来设置值，通过get key来获取值，当然还有其它的命令来设置不同结构数据，如mset key1 value1 key2 value2 连续设置两个key-value对值<br>获取是通过 mset key1 key2得到的value是一个List的集合 。其它的命令不一一列举，后面在Java中会有讲到。<br>有意思的是如果一个事务中的某个命令执行出错了，事务中其它的命令照样执行，不会有影响。Redis的事务没有关系数据库事务提供的回滚（rollback） 功能，我们只能自己手动执行命令将数据库复原回事务执行前的状态等。另外咱们常用的都是在程序中执行，Java是会有语法检错的。</p>
+</li>
+<li><p>Java中使用<br>Redis的Java首选开发包是jedis<br>Jedis的jar下载地址：<a href="http://maven.outofmemory.cn/redis.clients/jedis/2.5.2/" target="_blank" rel="external">http://maven.outofmemory.cn/redis.clients/jedis/2.5.2/</a><br>将下载好的jedis jar包放到自己建好的工程包目录下，引入一些基础的Apache和jdk包即可。<br>然后写一个单元测试类JedisUtilTest.java，如下：</p>
+<blockquote>
+<p>import org.junit.Before;<br>import org.junit.Test;<br>import redis.clients.jedis.Jedis;<br>import redis.clients.jedis.JedisPool;<br>import redis.clients.jedis.JedisPoolConfig;<br>import java.util.HashMap;<br>import java.util.Iterator;<br>import java.util.List;<br>import java.util.Map; </p>
+</blockquote>
+</li>
 </ol>
-<p>如下图：</p>
-<p>执行redis-cli.exe后可以直接输入set key value命令来设置值，通过get key来获取值，当然还有其它的命令来设置不同结构数据，如mset key1 value1 key2 value2 连续设置两个key-value对值<br>获取是通过 mset key1 key2得到的value是一个List的集合 。其它的命令不一一列举，后面在Java中会有讲到。<br>有意思的是如果一个事务中的某个命令执行出错了，事务中其它的命令照样执行，不会有影响。Redis的事务没有关系数据库事务提供的回滚（rollback） 功能，我们只能自己手动执行命令将数据库复原回事务执行前的状态等。另外咱们常用的都是在程序中执行，Java是会有语法检错的。</p>
-<ol>
-<li>Java中使用<br>Redis的Java首选开发包是jedis<br>Jedis的jar下载地址：<a href="http://maven.outofmemory.cn/redis.clients/jedis/2.5.2/" target="_blank" rel="external">http://maven.outofmemory.cn/redis.clients/jedis/2.5.2/</a><br>附件中是我下载的2.5.2版本<br>将下载好的jedis jar包放到自己建好的工程包目录下，引入一些基础的Apache和jdk包即可，我就是将现有微厅的jar全部拷贝进去，除了一些工程特殊的jar。<br>然后写一个单元测试类JedisUtilTest.java见附件，里面有相应的解释。</li>
-</ol>
-<p>注意：我在测试的过程中遇到了一个问题，弄了好长时间没有解决，就是写测试类初始化时JedisPool pool=new JedisPool(new JedisPoolConfig(), “127.0.0.1”);<br>总是报初始化错误，原因是找不到GenericObjectPoolConfig类，上网上搜了一下，说是没有引入commons-pool包，但是我发现工程里已经有commons-pool-1.6.jar，然后我就反编译了commons-pool-1.6.jar，发现里面根本就没有GenericObjectPoolConfig类。后来又查找，大家都说是jedis版本的问题，我就一顿的降版本，将了好几个都没使，网上也有和我遇到一样问题的，最后没有给出解决方案。最后我换了个<br>思路，查查commons-pool有没有更高版本的，找到commons-pool2-2.2.jar更高版本后居然好使了</p>
+<p>public class JedisUtilTest { </p>
+<pre><code>JedisPool pool; 
+Jedis jedis; 
+@Before 
+public void setUp<span class="params">()</span> { 
+    pool = new JedisPool<span class="params">(new JedisPoolConfig<span class="params">()</span>, <span class="string">"127.0.0.1"</span>)</span>;  
+    jedis = pool.getResource<span class="params">()</span>;  
+} 
+@Test 
+public void testGet<span class="params">()</span>{ 
+    System.out.println<span class="params">(jedis.get<span class="params">(<span class="string">"name"</span>)</span>)</span>; 
+} 
+
+<span class="comment">/** 
+ * Redis操作字符串
+ */</span> 
+@Test 
+public void testBasicString<span class="params">()</span>{
+        <span class="comment">//-----添加数据---------- </span>
+        jedis.set<span class="params">(<span class="string">"name"</span>,<span class="string">"lily"</span>)</span>;<span class="comment">//向key--&gt;name中放入了value--&gt;lily </span>
+        System.out.println<span class="params">(<span class="string">"set----"</span>+jedis.get<span class="params">(<span class="string">"name"</span>)</span>)</span>;<span class="comment">//执行结果：lily </span>
+        <span class="comment">//-----修改数据----------- </span>
+        <span class="comment">//1、在原来基础上修改 </span>
+        jedis.append<span class="params">(<span class="string">"name"</span>,<span class="string">"莉莉"</span>)</span>;   <span class="comment">//很直观，类似map 将莉莉 append到已经有的value之后 </span>
+        System.out.println<span class="params">(<span class="string">"append----"</span>+jedis.get<span class="params">(<span class="string">"name"</span>)</span>)</span>;<span class="comment">//执行结果:lily莉莉  </span>
+        <span class="comment">//2、直接覆盖原来的数据 </span>
+        jedis.set<span class="params">(<span class="string">"name"</span>,<span class="string">"莉莉"</span>)</span>; 
+        System.out.println<span class="params">(jedis.get<span class="params">(<span class="string">"name"</span>)</span>)</span>;<span class="comment">//执行结果：莉莉 </span>
+        <span class="comment">//删除key对应的记录</span>
+        jedis.del<span class="params">(<span class="string">"name"</span>)</span>; 
+        System.out.println<span class="params">(<span class="string">"delete----"</span>+jedis.get<span class="params">(<span class="string">"name"</span>)</span>)</span>;<span class="comment">//执行结果：null     </span>
+        <span class="comment">//批量操作 </span>
+        jedis.mset<span class="params">(<span class="string">"name"</span>,<span class="string">"lily"</span>,<span class="string">"jarorwar"</span>,<span class="string">"莉莉"</span>)</span>;            
+        System.out.println<span class="params">(<span class="string">"mset----"</span>+jedis.mget<span class="params">(<span class="string">"name"</span>,<span class="string">"jarorwar"</span>)</span>)</span>; 
+} 
+
+<span class="comment">/** 
+ * jedis操作Map 
+ */</span> 
+@Test 
+public void testMap<span class="params">()</span>{ 
+    Map&lt;String,String&gt; user=new HashMap&lt;String,String&gt;<span class="params">()</span>; 
+    user.put<span class="params">(<span class="string">"name"</span>,<span class="string">"莉莉"</span>)</span>; 
+    user.put<span class="params">(<span class="string">"pwd"</span>,<span class="string">"password"</span>)</span>; 
+    jedis.hmset<span class="params">(<span class="string">"user"</span>,user)</span>;
+    <span class="comment">//取出user中的name，执行结果:[莉莉]--&gt;注意结果是一个泛型的List </span>
+    <span class="comment">//第一个参数是存入redis中map对象的key，后面跟的是放入map中的对象的key，后面的key可以跟多个，是可变参数 </span>
+    List&lt;String&gt; rsmap = jedis.hmget<span class="params">(<span class="string">"user"</span>, <span class="string">"name"</span>)</span>; 
+    System.out.println<span class="params">(<span class="string">"hmset----"</span>+rsmap)</span>;  
+    <span class="comment">//删除map中的某个键值 </span>
+    jedis.hdel<span class="params">(<span class="string">"user"</span>,<span class="string">"pwd"</span>)</span>; 
+    System.out.println<span class="params">(jedis.hmget<span class="params">(<span class="string">"user"</span>, <span class="string">"pwd"</span>)</span>)</span>; <span class="comment">//因为删除了，所以返回的是null </span>
+    System.out.println<span class="params">(jedis.hlen<span class="params">(<span class="string">"user"</span>)</span>)</span>; <span class="comment">//返回key为user的键中存放的值的个数1 </span>
+    System.out.println<span class="params">(jedis.exists<span class="params">(<span class="string">"user"</span>)</span>)</span>;<span class="comment">//是否存在key为user的记录 返回true</span>
+    System.out.println<span class="params">(jedis.hkeys<span class="params">(<span class="string">"user"</span>)</span>)</span>;<span class="comment">//返回map对象中的所有key  [pwd, name] </span>
+    System.out.println<span class="params">(jedis.hvals<span class="params">(<span class="string">"user"</span>)</span>)</span>;<span class="comment">//返回map对象中的所有value  [minxr, password] </span>
+    Iterator&lt;String&gt; iter=jedis.hkeys<span class="params">(<span class="string">"user"</span>)</span>.iterator<span class="params">()</span>; 
+    while <span class="params">(iter.hasNext<span class="params">()</span>)</span>{ 
+        String key = iter.next<span class="params">()</span>;            
+        System.out.println<span class="params">(key+<span class="string">":"</span>+jedis.hmget<span class="params">(<span class="string">"user"</span>,key)</span>)</span>;
+    }     
+} 
+
+<span class="comment">/** 
+ * jedis操作List 
+ */</span> 
+@Test 
+public void testList<span class="params">()</span>{ 
+        <span class="comment">//开始前，先移除所有的内容 </span>
+        jedis.del<span class="params">(<span class="string">"list"</span>)</span>; 
+        System.out.println<span class="params">(jedis.lrange<span class="params">(<span class="string">"list"</span>,<span class="number">0</span>,-<span class="number">1</span>)</span>)</span>; 
+        <span class="comment">//先向key java framework中存放三条数据 </span>
+        jedis.lpush<span class="params">(<span class="string">"list"</span>,<span class="string">"lily"</span>)</span>; 
+        jedis.lpush<span class="params">(<span class="string">"list"</span>,<span class="string">"25"</span>)</span>; 
+        jedis.lpush<span class="params">(<span class="string">"list"</span>,<span class="string">"women"</span>)</span>; 
+        <span class="comment">//再取出所有数据jedis.lrange是按范围取出，</span>
+        <span class="comment">//第一个是key，第二个是起始位置，第三个是结束位置，jedis.llen获取长度 -1表示取得所有</span>
+        System.out.println<span class="params">(jedis.lrange<span class="params">(<span class="string">"list"</span>,<span class="number">0</span>,-<span class="number">1</span>)</span>)</span>; 
+    }
+
+<span class="comment">/** 
+ * jedis操作Set 
+ */</span> 
+@Test 
+public void testSet<span class="params">()</span>{ 
+        <span class="comment">//添加 </span>
+        jedis.sadd<span class="params">(<span class="string">"sname"</span>,<span class="string">"minxr"</span>)</span>; 
+        jedis.sadd<span class="params">(<span class="string">"sname"</span>,<span class="string">"jarorwar"</span>)</span>; 
+        jedis.sadd<span class="params">(<span class="string">"sname"</span>,<span class="string">"莉莉"</span>)</span>; 
+        jedis.sadd<span class="params">(<span class="string">"sanme"</span>,<span class="string">"noname"</span>)</span>; 
+        <span class="comment">//移除noname </span>
+        jedis.srem<span class="params">(<span class="string">"sname"</span>,<span class="string">"noname"</span>)</span>; 
+        System.out.println<span class="params">(jedis.smembers<span class="params">(<span class="string">"sname"</span>)</span>)</span>;
+        <span class="comment">//获取所有加入的value </span>
+        System.out.println<span class="params">(jedis.sismember<span class="params">(<span class="string">"sname"</span>, <span class="string">"minxr"</span>)</span>)</span>;
+        <span class="comment">//判断 minxr 是否是sname集合的元素 </span>
+        System.out.println<span class="params">(jedis.srandmember<span class="params">(<span class="string">"sname"</span>)</span>)</span>; 
+        System.out.println<span class="params">(jedis.scard<span class="params">(<span class="string">"sname"</span>)</span>)</span>;<span class="comment">//返回集合的元素个数 </span>
+    }
+
+@Test 
+public void test<span class="params">()</span> throws InterruptedException { 
+        <span class="comment">//keys中传入的可以用通配符</span>
+        System.out.println<span class="params">(jedis.keys<span class="params">(<span class="string">"*"</span>)</span>)</span>; <span class="comment">//返回当前库中所有的key</span>
+        System.out.println<span class="params">(jedis.keys<span class="params">(<span class="string">"*name"</span>)</span>)</span>;<span class="comment">//返回的sname   [sname, name] </span>
+        System.out.println<span class="params">(jedis.del<span class="params">(<span class="string">"sanmdde"</span>)</span>)</span>;<span class="comment">//删除key为sanmdde的对象  删除成功返回1 删除失败（或者不存在）返回 0 </span>
+        System.out.println<span class="params">(jedis.ttl<span class="params">(<span class="string">"sname"</span>)</span>)</span>;<span class="comment">//返回给定key的有效时间，如果是-1则表示永远有效 </span>
+        jedis.setex<span class="params">(<span class="string">"timekey"</span>, <span class="number">10</span>, <span class="string">"min"</span>)</span>;<span class="comment">//通过此方法，可以指定key的存活（有效时间） 时间为秒 </span>
+        Thread.sleep<span class="params">(<span class="number">5000</span>)</span>;<span class="comment">//睡眠5秒后，剩余时间将为&lt;=5  </span>
+        System.out.println<span class="params">(jedis.ttl<span class="params">(<span class="string">"timekey"</span>)</span>)</span>;   <span class="comment">//输出结果为5</span>
+        jedis.setex<span class="params">(<span class="string">"timekey"</span>, <span class="number">1</span>, <span class="string">"min"</span>)</span>;        <span class="comment">//设为1后，下面再看剩余时间就是1了</span>
+        System.out.println<span class="params">(jedis.ttl<span class="params">(<span class="string">"timekey"</span>)</span>)</span>;  <span class="comment">//输出结果为1</span>
+        System.out.println<span class="params">(jedis.exists<span class="params">(<span class="string">"key"</span>)</span>)</span>;<span class="comment">//检查key是否存在      </span>
+        System.out.println<span class="params">(jedis.rename<span class="params">(<span class="string">"timekey"</span>,<span class="string">"time"</span>)</span>)</span>; 
+        System.out.println<span class="params">(jedis.get<span class="params">(<span class="string">"timekey"</span>)</span>)</span>;<span class="comment">//因为移除，返回为null </span>
+        System.out.println<span class="params">(jedis.get<span class="params">(<span class="string">"time"</span>)</span>)</span>; <span class="comment">//因为将timekey 重命名为time 所以可以取得值 min </span>
+        <span class="comment">//jedis 排序 </span>
+        <span class="comment">//注意，此处的rpush和lpush是List的操作。是一个双向链表（但从表现来看的）  </span>
+        jedis.del<span class="params">(<span class="string">"a"</span>)</span>;<span class="comment">//先清除数据，再加入数据进行测试</span>
+        jedis.rpush<span class="params">(<span class="string">"a"</span>, <span class="string">"1"</span>)</span>; 
+        jedis.lpush<span class="params">(<span class="string">"a"</span>,<span class="string">"6"</span>)</span>; 
+        jedis.lpush<span class="params">(<span class="string">"a"</span>,<span class="string">"3"</span>)</span>; 
+        jedis.lpush<span class="params">(<span class="string">"a"</span>,<span class="string">"9"</span>)</span>; 
+        System.out.println<span class="params">(jedis.lrange<span class="params">(<span class="string">"a"</span>,<span class="number">0</span>,-<span class="number">1</span>)</span>)</span>;<span class="comment">// [9, 3, 6, 1] </span>
+        System.out.println<span class="params">(jedis.sort<span class="params">(<span class="string">"a"</span>)</span>)</span>; <span class="comment">//[1, 3, 6, 9]  //输入排序后结果</span>
+        System.out.println<span class="params">(jedis.lrange<span class="params">(<span class="string">"a"</span>,<span class="number">0</span>,-<span class="number">1</span>)</span>)</span>; 
+    } 
+</code></pre><p>}</p>
+<p>注意：我在测试的过程中遇到了一个问题，弄了好长时间没有解决，就是写测试类初始化时JedisPool pool=new JedisPool(new JedisPoolConfig(), “127.0.0.1”);<br>总是报初始化错误，原因是找不到GenericObjectPoolConfig类，上网上搜了一下，说是没有引入commons-pool包，但是我发现工程里已经有commons-pool-1.6.jar，然后我就反编译了commons-pool-1.6.jar，发现里面根本就没有GenericObjectPoolConfig类。后来又查找，大家都说是jedis版本的问题，我就一顿的降版本，将了好几个都没使，网上也有和我遇到一样问题的，最后没有给出解决方案。最后我换了个思路，查查commons-pool有没有更高版本的，找到commons-pool2-2.2.jar更高版本后居然好使了。</p>
 
     
   </div>
