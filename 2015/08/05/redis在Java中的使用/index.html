@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>redis在Java中的使用 | 微风</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="chenyy">
+  
+  
+    <meta name="description" content="Redis客户端支持多种语言，包括：c、C++、C#、php、java、python、go等语言，根据自己的开发语言，选择合适的Redis客户端版本类型即可。针对Java语言，Redis客户端也提供了多种客户端支持，按照推荐类型依次是：Jedis、Redisson、JRedis、JDBC-Redis、RJC、redis-protocol、aredis、lettuce。下面将介绍Jedis与Redi">
+  
+  <meta name="description" content="Redis客户端支持多种语言，包括：c、C++、C#、php、java、python、go等语言，根据自己的开发语言，选择合适的Redis客户端版本类型即可。针对Java语言，Redis客户端也提供了多种客户端支持，按照推荐类型依次是：Jedis、Redisson、JRedis、JDBC-Redis、RJC、redis-protocol、aredis、lettuce。下面将介绍Jedis与Redi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis在Java中的使用">
+<meta property="og:url" content="http://yoursite.com/2015/08/05/redis在Java中的使用/index.html">
+<meta property="og:site_name" content="微风">
+<meta property="og:description" content="Redis客户端支持多种语言，包括：c、C++、C#、php、java、python、go等语言，根据自己的开发语言，选择合适的Redis客户端版本类型即可。针对Java语言，Redis客户端也提供了多种客户端支持，按照推荐类型依次是：Jedis、Redisson、JRedis、JDBC-Redis、RJC、redis-protocol、aredis、lettuce。下面将介绍Jedis与Redi">
+<meta property="og:updated_time" content="2015-08-05T06:40:55.005Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redis在Java中的使用">
+<meta name="twitter:description" content="Redis客户端支持多种语言，包括：c、C++、C#、php、java、python、go等语言，根据自己的开发语言，选择合适的Redis客户端版本类型即可。针对Java语言，Redis客户端也提供了多种客户端支持，按照推荐类型依次是：Jedis、Redisson、JRedis、JDBC-Redis、RJC、redis-protocol、aredis、lettuce。下面将介绍Jedis与Redi">
+  
+    <link rel="alternate" href="/atom.xml" title="微风" type="application/atom+xml">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">微风</a></h1>
+    <p><a href="/"></a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2015/08/05/redis在Java中的使用/">
+  <time datetime="2015-08-05T06:18:37.000Z">
+    2015-08-05
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">redis在Java中的使用</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>Redis客户端支持多种语言，包括：c、C++、C#、php、java、python、go等语言，根据自己的开发语言，选择合适的Redis客户端版本类型即可。针对Java语言，Redis客户端也提供了多种客户端支持，按照推荐类型依次是：Jedis、Redisson、JRedis、JDBC-Redis、RJC、redis-protocol、aredis、lettuce。下面将介绍Jedis与Redis客户端的交互使用。<br><a id="more"></a><br>Jedis提供了多种操作方式：单机连接方式、单机连接池方式、多机分布式+连接池方式。<br><strong>单机连接方式</strong><br>此方式建议用于本机开发环境调试使用<br>Jedis client = new Jedis(“127.0.0.1”, 6379);//可以不写端口使用默认的<br>// 执行set指令<br>client.set(“key-value”, “Hello, Redis!”);<br>// 执行get指令<br>String value = client.get(“key-value”);<br>System.out.println(“get指令执行结果:”+value);//get指令执行结果:Hello, Redis!</p>
+<p><strong>单机连接池方式</strong><br>用于单个redis实例场景<br>// 生成连接池配置信息<br>JedisPoolConfig config = new JedisPoolConfig();<br>config.setMaxIdle(10);<br>config.setMaxTotal(30);<br>config.setMaxWaitMillis(3*1000);</p>
+<p>// 在应用初始化的时候生成连接池<br>JedisPool pool = new JedisPool(config, “192.168.56.102”, 6379);</p>
+<p>// 在业务操作时，从连接池获取连接<br>Jedis client = pool.getResource();<br>try {<br>    client.set(“key-string”, “Hello, Redis!”);<br>    String value = client.get(“key-string”);<br>    System.out.println(“get指令执行结果:”+value);//get指令执行结果:Hello, Redis!<br>} catch (Exception e) {<br>    e.printStackTrace();<br>} finally {<br>    // 业务操作完成，将连接返回给连接池<br>    if (null != client) {<br>        pool.returnResource(client);<br>    }<br>}<br>// 应用关闭时，释放连接池资源<br>pool.destroy();</p>
+<p><strong>多机分布式+连接池方式</strong><br>用于多个redis实例场景<br>// 生成多机连接信息列表<br>List<jedisshardinfo> shards = new ArrayList<jedisshardinfo>();<br>shards.add( new JedisShardInfo(“127.0.0.1”, 6379) );<br>shards.add( new JedisShardInfo(“192.168.56.102”, 6379) );</jedisshardinfo></jedisshardinfo></p>
+<p>// 生成连接池配置信息<br>JedisPoolConfig config = new JedisPoolConfig();<br>config.setMaxIdle(10);<br>config.setMaxTotal(30);<br>config.setMaxWaitMillis(3*1000);</p>
+<p>// 在应用初始化的时候生成连接池<br>ShardedJedisPool pool = new ShardedJedisPool(config, shards);<br>// 在业务操作时，从连接池获取连接<br>ShardedJedis client = pool.getResource();<br>try {<br>    // 执行指令<br>    String result = client.set(“key-string”, “Hello, Redis!”);<br>    System.out.println( String.format(“set指令执行结果:%s”, result) );<br>    String value = client.get(“key-string”);<br>    System.out.println( String.format(“get指令执行结果:%s”, value) );<br>} catch (Exception e) {<br>    // TODO: handle exception<br>} finally {<br>// 业务操作完成，将连接返回给连接池<br>    if (null != client) {<br>        pool.returnResource(client);<br>    }<br>} // end of try block</p>
+<p>// 应用关闭时，释放连接池资源<br>pool.destroy();</p>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2015 <a href="/">chenyy</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>
